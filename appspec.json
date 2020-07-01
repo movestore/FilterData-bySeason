@@ -1,0 +1,35 @@
+{
+  "settings": [
+    {
+      "id": "startTimestamp",
+      "name": "Start of your season",
+      "description": "Select the starting day/date (year will be ignored)",
+      "defaultValue": null,
+      "type": "INSTANT"
+    },
+    {
+      "id": "endTimestamp",
+      "name": "End date of your season",
+      "description": "Select the starting day/date (year will be ignored)",
+      "defaultValue": null,
+      "type": "INSTANT"
+    },
+    {
+      "id": "years",
+      "name": "Years you want to select seasons from",
+      "description": "Insert a comma limited list of years or ALL (then selecting all years that are in your data set",
+      "defaultValue": "ALL",
+      "type": "STRING"
+    }
+  ],
+  "dependencies": {
+    "R": [
+      {
+        "name": "move"
+      },
+      {
+        "name": "foreach"
+      }
+	]
+  }
+}
