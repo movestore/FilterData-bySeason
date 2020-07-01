@@ -1,44 +1,38 @@
-library('move')
-library('foreach')
+require('move')
+require('foreach')
 
-rFunction <- function(startTimestamps=NULL, endTimestamps=NULL, data)
+rFunction <- function(startTimestamp, endTimestamp, years='ALL', data)
 {
-  Sys.setenv(tz="GMT") #can this be used??
+  Sys.setenv(tz="GMT") #try
 
-  logger.info(paste0("You have selected ",length(startTimestamps), " start time intervals and ",length(endTimestamps)," end time intervals."))
+  startday <- as.POSIXlt(startTimestamp)$mday
+  startmonth <- as.POSIXlt(startTimestamp)$mon+1
+  endday <- as.POSIXlt(endTimestamp)$mday
+  endmonth <- as.POSIXlt(endTimestamp)$mon+1
   
-  if (is.null(startTimestamps))
+  print(paste0("You have selected time between ",startday,"/",startmonth," and ",endday,"/",endmonth," of the years: ", years))
+  
+  if (years=='ALL')
   {
-    logger.info(paste0("No starting time(s) provided, first timestamp of data used."))
-    startTimestamps <- min(timestamps(data))
+    years <- unique(as.POSIXlt(timestamps(data))$year+1900)
+    logger.info(paste0("You have selected all years of the data set: ",years))
   }
   
-  if (is.null(endTimestamps))
-  {
-    logger.info(paste0("No end time(s) provided, last timestamp of data used."))
-    endTimestamps <- max(timestamps(data))
-  }
+  years.vec <- as.numeric(strsplit(years,",")[[1]])
+  starts <- strptime(paste0(years.vec,"-",startmonth,"-",startday),format=c("%Y-%m-%d"))
+  ends <- strptime(paste0(years.vec,"-",endmonth,"-",endday),format=c("%Y-%m-%d"))
   
-  if (length(startTimestamps)!=length(endTimestamps)) 
-  {
-    logger.info("starting timestamps and end timestamps have different length, please correct. Return full data set.")
-    result <- data
-  } else
-  {
-    timeitvs <- data.frame("start"=as.POSIXct(startTimestamps), "end"=as.POSIXct(endTimestamps))
-    timeitvs.list <- split(timeitvs, seq(nrow(timeitvs)))
+  timeitvs <- data.frame("start"=as.POSIXct(starts), "end"=as.POSIXct(ends))
+  timeitvs.list <- split(timeitvs, seq(nrow(timeitvs)))
     
-    data.split <- split(data)
-    filt <- foreach(datai = data.split) %:% 
-      foreach(ti =timeitvs.list) %do% {
-        print(paste(namesIndiv(datai),":",ti$start,"-",ti$end))
-        datai[timestamps(datai)>=as.POSIXct(ti$start) & timestamps(datai)<=as.POSIXct(ti$end),]
-      }
-    names(filt) <- names(data.split)
-    
-    filt_nozero <- unlist(filt)[unlist(lapply(unlist(filt), length) > 1)] 
-    result <- moveStack(filt_nozero)
-  }
+  data.split <- split(data)
+  filt <- foreach(datai = data.split) %:% 
+    foreach(ti =timeitvs.list) %do% {
+      print(paste(namesIndiv(datai),":",ti$start,"-",ti$end))
+      datai[timestamps(datai)>=as.POSIXct(ti$start) & timestamps(datai)<=as.POSIXct(ti$end),]
+    }
+  names(filt) <- names(data.split)
   
-  result  
+  filt_nozero <- unlist(filt)[unlist(lapply(unlist(filt), length) > 1)] 
+  result <- moveStack(filt_nozero)
 }
