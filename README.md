@@ -1,2 +1,3 @@
 # time-selection
-select time frame(s) of data to use, incl. date-range, but also e.g. all months March in all years
+selects time frame for a given list of years, i.e. 1 March - 1 June of years 2013,2014,2016
+start and end "dates" are selected from calendar frame, but year from there will be ignored
