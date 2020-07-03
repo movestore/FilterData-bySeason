@@ -25,7 +25,7 @@ rFunction <- function(startTimestamp, endTimestamp, years='ALL', data)
   timeitvs <- data.frame("start"=as.POSIXct(starts), "end"=as.POSIXct(ends))
   timeitvs.list <- split(timeitvs, seq(nrow(timeitvs)))
     
-  data.split <- split(data)
+  data.split <- move::split(data)
   filt <- foreach(datai = data.split) %:% 
     foreach(ti =timeitvs.list) %do% {
       print(paste(namesIndiv(datai),":",ti$start,"-",ti$end))
