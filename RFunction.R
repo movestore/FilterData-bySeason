@@ -3,26 +3,25 @@ require('foreach')
 
 rFunction <- function(startTimestamp, endTimestamp, years='ALL', data)
 {
-  Sys.setenv(tz="GMT") #try
+  Sys.setenv(tz="GMT")
 
-  startday <- as.POSIXlt(startTimestamp)$mday
-  startmonth <- as.POSIXlt(startTimestamp)$mon+1
-  endday <- as.POSIXlt(endTimestamp)$mday
-  endmonth <- as.POSIXlt(endTimestamp)$mon+1
+  startday <- as.POSIXlt(startTimestamp,tz="GMT")$mday
+  startmonth <- as.POSIXlt(startTimestamp,tz="GMT")$mon+1
+  endday <- as.POSIXlt(endTimestamp,tz="GMT")$mday
+  endmonth <- as.POSIXlt(endTimestamp,tz="GMT")$mon+1
   
   print(paste0("You have selected time between ",startday,"/",startmonth," and ",endday,"/",endmonth," of the years: ", years))
   
   if (years=='ALL')
   {
-    years <- unique(as.POSIXlt(timestamps(data))$year+1900)
-    logger.info(paste0("You have selected all years of the data set: ",years))
-  }
+    years.vec <- unique(as.POSIXlt(timestamps(data),tz="GMT")$year+1900)
+    logger.info(paste0("You have selected all years of the data set: ",years.vec))
+  } else years.vec <- as.numeric(strsplit(years,",")[[1]])
   
-  years.vec <- as.numeric(strsplit(years,",")[[1]])
-  starts <- strptime(paste0(years.vec,"-",startmonth,"-",startday),format=c("%Y-%m-%d"))
-  ends <- strptime(paste0(years.vec,"-",endmonth,"-",endday),format=c("%Y-%m-%d"))
+  starts <- strptime(paste0(years.vec,"-",startmonth,"-",startday),format=c("%Y-%m-%d"),tz="GMT")
+  ends <- strptime(paste0(years.vec,"-",endmonth,"-",endday),format=c("%Y-%m-%d"),tz="GMT")
   
-  timeitvs <- data.frame("start"=as.POSIXct(starts), "end"=as.POSIXct(ends))
+  timeitvs <- data.frame("start"=as.POSIXct(starts,tz="GMT"), "end"=as.POSIXct(ends,tz="GMT"))
   timeitvs.list <- split(timeitvs, seq(nrow(timeitvs)))
     
   data.split <- move::split(data)
@@ -32,7 +31,18 @@ rFunction <- function(startTimestamp, endTimestamp, years='ALL', data)
       datai[timestamps(datai)>=as.POSIXct(ti$start) & timestamps(datai)<=as.POSIXct(ti$end),]
     }
   names(filt) <- names(data.split)
-  
-  filt_nozero <- unlist(filt)[unlist(lapply(unlist(filt), length) > 1)] 
-  result <- moveStack(filt_nozero)
+
+  if (all(unlist(lapply(unlist(filt), length))==0)) #if there remain no data at all
+  {
+    logger.info("!None of your data lie in the requested season. Reselect data set or time frame. Here return input data set") #moveStack does not allow empty objects
+    result <- data
+  } else
+  {
+    if (any(unlist(lapply(unlist(filt), length))==0))
+    {
+      filt_nozero <- unlist(filt)[unlist(lapply(unlist(filt), length) > 1)]
+      result <- moveStack(filt_nozero)
+    } else result <- filt
+  }
+  result
 }
