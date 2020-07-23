@@ -15,11 +15,19 @@ rFunction <- function(startTimestamp, endTimestamp, years='ALL', data)
   if (years=='ALL')
   {
     years.vec <- unique(as.POSIXlt(timestamps(data),tz="GMT")$year+1900)
-    logger.info(paste0("You have selected all years of the data set: ",years.vec))
+    logger.info(paste0("You have selected all years of the data set: ",paste(years.vec,collapse=", ")))
   } else years.vec <- as.numeric(strsplit(years,",")[[1]])
   
   starts <- strptime(paste0(years.vec,"-",startmonth,"-",startday),format=c("%Y-%m-%d"),tz="GMT")
   ends <- strptime(paste0(years.vec,"-",endmonth,"-",endday),format=c("%Y-%m-%d"),tz="GMT")
+  len <- length(ends)
+  
+  # adapt for ranges that cross NY
+  if (starts[1]>ends[1])
+  {
+    starts <- c(strptime(paste0(years.vec[1],"-",1,"-",1),format=c("%Y-%m-%d"),tz="GMT"),starts)
+    ends <- c(ends,strptime(paste0(years.vec[len],"-",12,"-",31),format=c("%Y-%m-%d"),tz="GMT"))
+  }
   
   timeitvs <- data.frame("start"=as.POSIXct(starts,tz="GMT"), "end"=as.POSIXct(ends,tz="GMT"))
   timeitvs.list <- split(timeitvs, seq(nrow(timeitvs)))
@@ -40,7 +48,7 @@ rFunction <- function(startTimestamp, endTimestamp, years='ALL', data)
   {
     if (any(unlist(lapply(unlist(filt), length))==0))
     {
-      filt_nozero <- unlist(filt)[unlist(lapply(unlist(filt), length) > 1)]
+      filt_nozero <- unlist(filt)[unlist(lapply(unlist(filt), length) > 0)] #allow move elements of length 1
       result <- moveStack(filt_nozero)
     } else result <- filt
   }
