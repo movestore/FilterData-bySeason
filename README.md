@@ -30,7 +30,7 @@ none
 
 **Parameter `endTimestamp`:** If the start timestamp or the end timestamp are not selected (i.e. NULL) the data is not filtered by season. If a `years` variable other than `ALL`was defined, then all data of the defined years are returned.
 
-!> If the endTimestamp is before the startTimestamp in the year, then the data is filtered each year for 1 January - endTimestamp and startTimestamp - 31 December. Thus, seasons crossing the New Year can also be defined.
+:warning: If the endTimestamp is before the startTimestamp in the year, then the data is filtered each year for 1 January - endTimestamp and startTimestamp - 31 December. Thus, seasons crossing the New Year can also be defined.
 
 **Parameter `years`:** Year is by default `ALL`, so if no years are defined by the user then all in the data set available years are used for filtering. If both startTimestamp and/or endTimestamp and years are not set by the user, the input data set is returned. A warning is given.
 
