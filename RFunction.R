@@ -21,9 +21,9 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years='ALL', data)
     if (years=='ALL') result <- data else result <- data[which((as.POSIXlt(timestamps(data))$year+1900) %in% years.vec),]
   } else
   {
-    startLT <- as.POSIXlt(startTimestamp,tz="GMT")
+    startLT <- as.POSIXlt(startTimestamp,format="%Y-%m-%dT%H:%M:%OSZ",tz="GMT")
     startday <- paste0(startLT$mon+1,"-",startLT$mday," ",startLT$hour,":",startLT$min,":",startLT$sec)
-    endLT <- as.POSIXlt(endTimestamp,tz="GMT")
+    endLT <- as.POSIXlt(endTimestamp,format="%Y-%m-%dT%H:%M:%OSZ",tz="GMT")
     endday <- paste0(endLT$mon+1,"-",endLT$mday," ",endLT$hour,":",endLT$min,":",endLT$sec)
     
     print(paste0("You have selected time between ",startday," and ",endday," of the years: ", years))
