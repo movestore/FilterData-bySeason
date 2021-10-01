@@ -3,11 +3,11 @@ require('foreach')
 
 rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years='ALL', data)
 {
-  Sys.setenv(tz="GMT")
+  Sys.setenv(tz="UTC")
 
   if (years=='ALL')
   {
-    years.vec <- unique(as.POSIXlt(timestamps(data),tz="GMT")$year+1900)
+    years.vec <- unique(as.POSIXlt(timestamps(data),tz="UTC")$year+1900)
     logger.info(paste0("You have selected all years of the data set: ",paste(years.vec,collapse=", ")))
   } else 
   {
@@ -21,25 +21,25 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years='ALL', data)
     if (years=='ALL') result <- data else result <- data[which((as.POSIXlt(timestamps(data))$year+1900) %in% years.vec),]
   } else
   {
-    startLT <- as.POSIXlt(startTimestamp,format="%Y-%m-%dT%H:%M:%OSZ",tz="GMT")
+    startLT <- as.POSIXlt(startTimestamp,format="%Y-%m-%dT%H:%M:%OSZ",tz="UTC")
     startday <- paste0(startLT$mon+1,"-",startLT$mday," ",startLT$hour,":",startLT$min,":",startLT$sec)
-    endLT <- as.POSIXlt(endTimestamp,format="%Y-%m-%dT%H:%M:%OSZ",tz="GMT")
+    endLT <- as.POSIXlt(endTimestamp,format="%Y-%m-%dT%H:%M:%OSZ",tz="UTC")
     endday <- paste0(endLT$mon+1,"-",endLT$mday," ",endLT$hour,":",endLT$min,":",endLT$sec)
     
     print(paste0("You have selected time between ",startday," and ",endday," of the years: ", years))
     
-    starts <- strptime(paste0(years.vec,"-",startday),format=c("%Y-%m-%d %H:%M:%S"),tz="GMT")
-    ends <- strptime(paste0(years.vec,"-",endday),format=c("%Y-%m-%d %H:%M:%S"),tz="GMT")
+    starts <- strptime(paste0(years.vec,"-",startday),format=c("%Y-%m-%d %H:%M:%S"),tz="UTC")
+    ends <- strptime(paste0(years.vec,"-",endday),format=c("%Y-%m-%d %H:%M:%S"),tz="UTC")
     len <- length(ends)
     
     # adapt for ranges that cross NY
     if (starts[1]>ends[1])
     {
-      starts <- c(strptime(paste0(years.vec[1],"-",1,"-",1," ",0,":",0,":",0),format=c("%Y-%m-%d %H:%M:%S"),tz="GMT"),starts)
-      ends <- c(ends,strptime(paste0(years.vec[len],"-",12,"-",31," ",23,":",59,":",59),format=c("%Y-%m-%d %H:%M:%S"),tz="GMT"))
+      starts <- c(strptime(paste0(years.vec[1],"-",1,"-",1," ",0,":",0,":",0),format=c("%Y-%m-%d %H:%M:%S"),tz="UTC"),starts)
+      ends <- c(ends,strptime(paste0(years.vec[len],"-",12,"-",31," ",23,":",59,":",59),format=c("%Y-%m-%d %H:%M:%S"),tz="UTC"))
     }
     
-    timeitvs <- data.frame("start"=as.POSIXct(starts,tz="GMT"), "end"=as.POSIXct(ends,tz="GMT"))
+    timeitvs <- data.frame("start"=as.POSIXct(starts,tz="UTC"), "end"=as.POSIXct(ends,tz="UTC"))
     timeitvs.list <- split(timeitvs, seq(nrow(timeitvs)))
     
     data.split <- move::split(data)
