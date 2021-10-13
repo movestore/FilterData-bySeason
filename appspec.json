@@ -9,15 +9,16 @@
     },
     {
       "id": "endTimestamp",
-      "name": "End date of your season",
-      "description": "Select the starting day/date (year will be ignored)",
+      "name": "End of your season (UTC)",
+      "description": "Select the ending day/date (year will be ignored)
+",
       "defaultValue": null,
       "type": "INSTANT"
     },
     {
       "id": "years",
       "name": "Years you want to select seasons from",
-      "description": "Insert a comma limited list of years or ALL (then selecting all years that are in your data set",
+      "description": "List years you want to select seasons from (years must be comma-separated!). Default is ALL years (selects all years that are in your data set).",
       "defaultValue": "ALL",
       "type": "STRING"
     }
