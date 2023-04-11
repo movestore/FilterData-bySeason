@@ -52,7 +52,7 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years='ALL', data)
     names(filt) <- names(data.split)
     
     filt <-  setNames(lapply(seq_along(filt), function(x) {
-      yrs <- lapply(filt[[x]], function(y) year(timestamps(y)[1]))
+      yrs <- unlist(lapply(filt[[x]], function(y) year(timestamps(y)[1])))
       setNames(filt[[x]],yrs)
       }), names(filt))
     
