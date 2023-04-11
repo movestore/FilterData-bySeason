@@ -9,6 +9,8 @@ Selects positions that fall within a selected time range of several (also user-p
 ## Documentation
 This App filters the data to defined seasonal time intervals of a selection of years. Of the user-defined start timestamp and end timestamp only month, year, hour, minute and second are extracted. Year(s) must independently specified or are all in the data set available years by default.
 
+Note that the names of your new tracks (split by year) are composed of the animal ID (individual local identifier) and the year of the first location of the track.
+
 ### Input data
 moveStack in Movebank format
 
