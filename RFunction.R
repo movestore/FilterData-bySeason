@@ -1,5 +1,6 @@
 require('move')
 require('foreach')
+library('lubridate')
 
 rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years='ALL', data)
 {
@@ -50,7 +51,13 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years='ALL', data)
       }
     names(filt) <- names(data.split)
     
+    filt <-  setNames(lapply(seq_along(filt), function(x) {
+      yrs <- lapply(filt[[x]], function(y) year(timestamps(y)[1]))
+      setNames(filt[[x]],yrs)
+      }), names(filt))
+    
     filt_nozero <- unlist(filt)[unlist(lapply(unlist(filt), length) > 0)] #allow move elements of length 1
+    
     if (length(filt_nozero)==0) #if there remain no data at all
     {
       logger.info("!None of your data lie in the requested season. Reselect data set or time frame. Return NULL.") #moveStack does not allow empty objects
