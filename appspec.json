@@ -2,14 +2,14 @@
   "settings": [
     {
       "id": "startTimestamp",
-      "name": "Start of your season",
+      "name": "Start of the season to retain",
       "description": "Select the starting day/date (year will be ignored)",
       "defaultValue": null,
       "type": "INSTANT"
     },
     {
       "id": "endTimestamp",
-      "name": "End of your season (UTC)",
+      "name": "End of the season to retain",
       "description": "Select the ending day/date (year will be ignored)
 ",
       "defaultValue": null,
@@ -18,7 +18,7 @@
     {
       "id": "years",
       "name": "Years you want to select seasons from",
-      "description": "List years you want to select seasons from (years must be comma-separated!). Default is ALL years (selects all years that are in your data set).",
+      "description": "List years you want to select seasons from (years must be comma-separated!). Default is "ALL" (selects from all years that are in your data set).",
       "defaultValue": "ALL",
       "type": "STRING"
     }
