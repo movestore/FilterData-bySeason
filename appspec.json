@@ -18,7 +18,7 @@
     {
       "id": "years",
       "name": "Years you want to select seasons from",
-      "description": "List years you want to select seasons from (years must be comma-separated!). Default is ALL YEARS (selects all years that are in your data set). Note that the starting year of the selected season is required if your specified season crosses December/January.",
+      "description": "List years you want to select seasons from (years must be comma-separated!). Note that the starting year of the selected season is required if your specified season crosses December/January. Empty default is ALL YEARS (selects all years that are in your data set).",
       "defaultValue": null,
       "type": "STRING"
     },

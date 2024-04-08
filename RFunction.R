@@ -8,11 +8,11 @@ library('lubridate')
 # one can use the function from the logger.R file:
 # logger.fatal(), logger.error(), logger.warn(), logger.info(), logger.debug(), logger.trace()
 
-rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years="ALL",filter=TRUE, season=NULL, splitt=FALSE, data)
+rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=TRUE, season=NULL, splitt=FALSE, data)
 {
   Sys.setenv(tz="UTC")
 
-  if (years=="ALL")
+  if (is.null(years))
   {
     years.vec <- unique(as.POSIXlt(mt_time(data),tz="UTC")$year+1900)
     logger.info(paste0("You have selected all years of the data set: ",paste(years.vec,collapse=", ")))
@@ -25,7 +25,7 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years="ALL",filter
   if (is.null(startTimestamp) | is.null(endTimestamp))
   {
     logger.info("You did not provide a start and/or end timestamp. So it is not possible to filter for a season. The whole data set of the selected years is returned.")
-    if (years=='ALL') result <- data else result <- data[which((as.POSIXlt(mt_times(data))$year+1900) %in% years.vec),]
+    if (is.null(years)) result <- data else result <- data[which((as.POSIXlt(mt_times(data))$year+1900) %in% years.vec),]
   } else
   {
     startLT <- as.POSIXlt(startTimestamp,format="%Y-%m-%dT%H:%M:%OSZ",tz="UTC")
