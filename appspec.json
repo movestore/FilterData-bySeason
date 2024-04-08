@@ -1,32 +1,53 @@
 {
+  "version": "1.2",
   "settings": [
     {
       "id": "startTimestamp",
-      "name": "Start of your season",
+      "name": "Start of the season to retain",
       "description": "Select the starting day/date (year will be ignored)",
       "defaultValue": null,
       "type": "INSTANT"
     },
     {
       "id": "endTimestamp",
-      "name": "End of your season (UTC)",
-      "description": "Select the ending day/date (year will be ignored)
-",
+      "name": "End of the season to retain (UTC)",
+      "description": "Select the ending day/date (year will be ignored)",
       "defaultValue": null,
       "type": "INSTANT"
     },
     {
       "id": "years",
       "name": "Years you want to select seasons from",
-      "description": "List years you want to select seasons from (years must be comma-separated!). Default is ALL years (selects all years that are in your data set).",
-      "defaultValue": "ALL",
+      "description": "List years you want to select seasons from (years must be comma-separated!). Default is ALL YEARS (selects all years that are in your data set). Note that the starting year of the selected season is required if your specified season crosses December/January.",
+      "defaultValue": null,
       "type": "STRING"
+    },
+	    {
+      "id": "season",
+      "name": "Name of your season for annotation",
+      "description": "Provide a conclusive name for your season. This will be attributed to all locations during that season in the new column 'season'. If you select not to filter the data, locations that are not in the selected season obtain the column entry 'none'.",
+      "defaultValue": null,
+      "type": "STRING"
+    },
+	    {
+      "id": "filter",
+      "name": "Filter data for season locations?",
+      "description": "Select here, if you want your data to be filtered to only contain locations in the specified seasons (and years). If unselected, the input data set will be returned with an extra column 'season' appended.",
+      "defaultValue": true,
+      "type": "CHECKBOX"
+    },
+	    {
+      "id": "splitt",
+      "name": "Split tracks by season?",
+      "description": "Select here, if you want to split the (animal/deployment) tracks by season. That way you avoid unrealistic steps connecting the end and start locations of different years within the same animal/deployment, which can lead to wrong conclusions in subsequent analyses. Note that this setting is only possible if the above Filter setting is TRUE.",
+      "defaultValue": false,
+      "type": "CHECKBOX"
     }
   ],
   "dependencies": {
     "R": [
       {
-        "name": "move"
+        "name": "move2"
       },
       {
         "name": "foreach"
@@ -42,6 +63,8 @@
   "language": "eng",
   "keywords": [
     "filter",
+	"annotate",
+	"split",
 	"time",
 	"season",
 	"locations"
@@ -57,8 +80,5 @@
       "affiliation": "Max-Planck-Institute of Animal Behavior",
       "affiliationRor": "https://ror.org/026stee22"
     }
-  ],
-  "documentation" : {
-    "url": "https://github.com/movestore/FilterData-bySeason/blob/master/README.md"
-  }
+  ]
 }

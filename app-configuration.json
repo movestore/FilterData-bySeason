@@ -1,0 +1,8 @@
+{
+    "startTimestamp" : "2000-11-01T12:00:00Z",
+    "endTimestamp" : "2000-02-01T12:00:00Z",
+    "years" : "ALL",
+    "filter" : true,
+    "season" : "winter", 
+    "splitt" : false
+}
