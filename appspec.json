@@ -40,7 +40,7 @@
       "id": "splitt",
       "name": "Split tracks by season?",
       "description": "Select here, if you want to split the (animal/deployment) tracks by season. That way you avoid unrealistic steps connecting the end and start locations of different years within the same animal/deployment, which can lead to wrong conclusions in subsequent analyses. Note that this setting is only possible if the above Filter setting is TRUE.",
-      "defaultValue": false,
+      "defaultValue": true,
       "type": "CHECKBOX"
     }
   ],
@@ -54,6 +54,9 @@
       },
 	        {
         "name": "lubridate"
+      },
+	        {
+        "name": "dplyr"
       }
 	]
   },

@@ -1,6 +1,7 @@
 library('move2')
 require('foreach')
 library('lubridate')
+library('dplyr')
 
 ## The parameter "data" is reserved for the data object passed on from the previous app
 
@@ -33,7 +34,7 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
     endLT <- as.POSIXlt(endTimestamp,format="%Y-%m-%dT%H:%M:%OSZ",tz="UTC")
     endday <- paste0(endLT$mon+1,"-",endLT$mday," ",endLT$hour,":",endLT$min,":",endLT$sec)
     
-    logger.info(paste0("You have selected time between ",startday," and ",endday," of the years: ", years))
+    logger.info(paste0("You have selected time between ",startday," and ",endday," of the years: ", paste(years.vec,collapse=", ")))
     
     if (is.null(season))
     {
@@ -73,9 +74,8 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
       if (splitt==FALSE)
       {
         logger.info("Your data will be filtered to the selected season, but not split to separate tracks. Note that this might lead to unrealistic steps.")
-        filt_jn <- foreach(filti = filt) %do% {
-          mt_stack(filt[[1]],.track_combine="merge")}
-        filtf <- filt_jn
+        timeitvs.list %>% bind_rows() %>% mutate(int=interval(start,end)) %>% pull(int) ->ints #help from BartK :)
+        filtf <- data[mt_time(data) %within% split(ints, 1:length(ints)),]
       }
       if (splitt==TRUE)
       {
@@ -89,10 +89,10 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
         len_spl <- as.numeric(lapply(filt_spl,function(x) nrow(x)))
         filt_spl_nn <- filt_spl[len_spl>0]
         
-        filtf <- mt_stack(filt_spl_nn,.track_combine="rename") #the names should include the year, but this takes too much time now to figures out. later
+        filtf <- mt_stack(filt_spl_nn,.track_combine="rename") #the names should include the year, but this takes too much time now to figure out. later
       }
       
-      if (length(filtf)==0) #if there remain no data at all
+      if (nrow(filtf)==0) #if there remain no data at all
       {
         logger.info("!None of your data lie in the requested season. Reselect data set or time frame. Return NULL.") #moveStack does not allow empty objects
         result <- NULL
@@ -100,10 +100,12 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
     } else #if want to only annotate season (above datai returned after each time interval)
     {
       logger.info("You have selected to not filter your tracks for the season, but only annotate them with an extra column indicating the selected season. The input tracks are returned with extra column.")
-      filt_jn <- foreach(filti = filt) %do% {
-        mt_stack(filt[[1]],.track_combine="merge")}
-      result <- filt_jn
-      if (splitt==TRUE) logger.info("You have selected to split your tracks by filtered season, but requested to NOT filter the tracks. That is not possible. If you want to split your tracks by season, select filter=TRUE. Now, the input tracks are returned with extra column.")
+      
+      timeitvs.list %>% bind_rows() %>% mutate(int=interval(start,end)) %>% pull(int) ->ints #help from BartK :)
+      data$season[mt_time(data) %within% split(ints, 1:length(ints))] <- season
+      result <- data
+      
+      if (splitt==TRUE) logger.info("You have selected to split your tracks by filtered season, but requested to NOT filter the tracks. That is not possible. If you want to split your tracks by season, select filter=TRUE. Now, the input tracks are returned with extra column (same as for setting filter=FALSE and split=FALSE).")
     }
   }
 
