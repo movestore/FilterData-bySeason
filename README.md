@@ -7,9 +7,11 @@ Github repository: *github.com/movestore/FilterData-bySeason*
 Select or annotate records that fall within a selected time range and years. For example, this could be used to reduce the data to the spring migration seasons of 2013 and 2014, or to retain all records but label those occurring during this season.
 
 ## Documentation
-This App annotates or filters the data based on a user-defined seasonal time interval for a selection of years. Records within this season are identified in a new data attribute 'season'. The start and end of the season is can be defined with up to seconds precision. The user can specify one or more years to include, or (by default) include all years in the data set. 
+This App annotates or filters the data based on a user-defined seasonal time interval for a selection of years. The start and end of the season is can be defined with up to seconds precision. The user can specify one or more years to include, or (by default) include all years in the data set. 
 
-If the data are filtered, tracks can be split by year. In this case, the new track names are composed of the animal ID (individual local identifier) and the year of the first location of the track.
+If the data are filtered, tracks can be split by year. In this case, the output data set will contain new track names composed of the existing track IDs and the year of the first location of the track.
+
+Records within the defined season are identified in the output data set using a new data attribute `season`.
 
 ### Input data
 move2 location object
