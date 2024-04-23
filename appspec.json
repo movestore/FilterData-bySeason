@@ -3,43 +3,43 @@
   "settings": [
     {
       "id": "startTimestamp",
-      "name": "Start of the season to retain",
-      "description": "Select the starting day/date (year will be ignored)",
+      "name": "Start of the season to retain (UTC)",
+      "description": "Select the starting date and time (year will be ignored)",
       "defaultValue": null,
       "type": "INSTANT"
     },
     {
       "id": "endTimestamp",
       "name": "End of the season to retain (UTC)",
-      "description": "Select the ending day/date (year will be ignored)",
+      "description": "Select the ending date and time (year will be ignored)",
       "defaultValue": null,
       "type": "INSTANT"
     },
     {
       "id": "years",
-      "name": "Years you want to select seasons from",
-      "description": "List years you want to select seasons from (years must be comma-separated!). Note that the starting year of the selected season is required if your specified season crosses December/January. Empty default is ALL YEARS (selects all years that are in your data set).",
+      "name": "Years to select seasons from",
+      "description": "To select the season from a specific year or years in the dataset, enter a comma-separated list. If left empty, all years will be incuded. If the season crosses December-January, include the starting year.",
       "defaultValue": null,
       "type": "STRING"
     },
 	    {
       "id": "season",
-      "name": "Name of your season for annotation",
-      "description": "Provide a conclusive name for your season. This will be attributed to all locations during that season in the new column 'season'. If you select not to filter the data, locations that are not in the selected season obtain the column entry 'none'.",
+      "name": "Name of the season",
+      "description": "Provide a name for the season. This will be attributed to all records during the season in a new column 'season'. If left empty, the specified time interval will be used. If 'Filter data for season locations?' is not checked, records that are not in the selected season will be assigned the value 'none'.",
       "defaultValue": null,
       "type": "STRING"
     },
 	    {
       "id": "filter",
-      "name": "Filter data for season locations?",
-      "description": "Select here, if you want your data to be filtered to only contain locations in the specified seasons (and years). If unselected, the input data set will be returned with an extra column 'season' appended.",
+      "name": "Filter data for the season?",
+      "description": "Select whether to filter the data set to retain only records in the specified season and years. If not selected, the complete input data set will be returned with the results identified in the new column 'season'.",
       "defaultValue": true,
       "type": "CHECKBOX"
     },
 	    {
       "id": "splitt",
       "name": "Split tracks by season?",
-      "description": "Select here, if you want to split the (animal/deployment) tracks by season. That way you avoid unrealistic steps connecting the end and start locations of different years within the same animal/deployment, which can lead to wrong conclusions in subsequent analyses. Note that this setting is only possible if the above Filter setting is TRUE.",
+      "description": "If 'Filter data for the season?' is selected, select whether to split the tracks by season. This prevents unrealistic steps connecting the end of one season with the start of the next, which can lead to unexpected results in subsequent analyses. Note that this setting is only possible if the above Filter setting is TRUE.",
       "defaultValue": true,
       "type": "CHECKBOX"
     }
