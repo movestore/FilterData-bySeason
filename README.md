@@ -9,7 +9,7 @@ Select or annotate records that fall within a selected time range and years. For
 ## Documentation
 This App annotates or filters the data based on a user-defined seasonal time interval for a selection of years. The start and end of the season can be defined with up to seconds precision. The user can specify one or more years to include, or (by default) include all years in the data set. 
 
-If the data are filtered, tracks can be split by year. In this case, the output data set will contain new track names composed of the existing track IDs and the year of the first location of the track.
+If the data are filtered, tracks can be split by year. In this case, the output data set will contain new track names composed of the existing track IDs and the year of the first location of the track. Note that the trackID column changes in this case; subsequent analyses will be done based on those tracks (i.e. separately for each of them).
 
 Records within the defined season are identified in the output data set using a new data attribute `season`.
 

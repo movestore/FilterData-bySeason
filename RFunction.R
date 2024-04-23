@@ -90,6 +90,26 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
         filt_spl_nn <- filt_spl[len_spl>0]
         
         filtf <- mt_stack(filt_spl_nn,.track_combine="rename") #the names should include the year, but this takes too much time now to figure out. later
+        
+        #update track names to include the year
+        
+        ids <- unique(mt_track_id(filtf))
+        idsx <- ids[which (ids %in% unique(mt_track_id(data)) == FALSE)]
+        trackid_new <- mt_track_id(filtf)
+
+        for (k in seq(along=idsx))
+        {
+          ixdotE <- max(gregexpr("[.]",idsx[k])[[1]]) # index of last dot
+          ixE <- nchar(idsx[k])
+          yri <- year(mt_time(filtf[mt_track_id(filtf)==idsx[k],]))[1]
+
+          trackid_new[mt_track_id(filtf)==idsx[k]] <- paste0(substring(idsx[k],1,ixdotE),yri)
+        }
+        newtrackidname <- paste0(mt_track_id_column(filtf),"_year")
+        filtf[newtrackidname] <- trackid_new
+        filtf <- mt_set_track_id(filtf,newtrackidname) #note that the trackid column name has changed accordingly
+        
+        logger.info(paste0("Your track id column has changed to '",newtrackidname,"' leading to the followng trackIDs: \n",paste(unique(mt_track_id(filtf)),collapse=",\n")))
       }
       
       if (nrow(filtf)==0) #if there remain no data at all
