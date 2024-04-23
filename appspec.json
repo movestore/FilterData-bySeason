@@ -39,7 +39,7 @@
 	    {
       "id": "splitt",
       "name": "Split tracks by season?",
-      "description": "If 'Filter data for the season?' is selected, select whether to split the tracks by season. This prevents unrealistic steps connecting the end of one season with the start of the next, which can lead to unexpected results in subsequent analyses. Note that this setting is only possible if the above Filter setting is TRUE.",
+      "description": "If 'Filter data for the season?' is selected, select whether to split the tracks by season. This prevents unrealistic steps connecting the end of one season with the start of the next, which can lead to unexpected results in subsequent analyses. Note that this setting is only possible if the above Filter setting is selected.",
       "defaultValue": true,
       "type": "CHECKBOX"
     }
