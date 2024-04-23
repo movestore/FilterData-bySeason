@@ -7,7 +7,7 @@ Github repository: *github.com/movestore/FilterData-bySeason*
 Select or annotate records that fall within a selected time range and years. For example, this could be used to reduce the data to the spring migration seasons of 2013 and 2014, or to retain all records but label those occurring during this season.
 
 ## Documentation
-This App annotates or filters the data based on a user-defined seasonal time interval for a selection of years. The start and end of the season is can be defined with up to seconds precision. The user can specify one or more years to include, or (by default) include all years in the data set. 
+This App annotates or filters the data based on a user-defined seasonal time interval for a selection of years. The start and end of the season can be defined with up to seconds precision. The user can specify one or more years to include, or (by default) include all years in the data set. 
 
 If the data are filtered, tracks can be split by year. In this case, the output data set will contain new track names composed of the existing track IDs and the year of the first location of the track.
 
@@ -27,9 +27,9 @@ none
 
 **End of your season (UTC) (`endTimestamp`):** interactively select a timestamp with year, month, day, hour, minute and second. The year in this timestamp is not used for the analysis. Using an unrealistic year can help to indicate that this is ignored. Example: `1800-11-09 12:00:00`. Records are assessed based on values in the attribute `timestamp`.
 
-**Years to select seasons from (`years`):** a string of comma-separated calender years. The default value is `ALL`, in which case records are selected across all years in the data set. Example: 2013, 2014, 2015. If the specified season crosses December-January, the starting year of the selected season must be included. Records are assessed based on values in the attribute `timestamp`.
+**Years to select seasons from (`years`):** a string of comma-separated calender years. The (empty) default setting leads to the selection of records across all years in the data set. Example: 2013, 2014, 2015. If the specified season crosses December-January, the starting year of the selected season must be included. Records are assessed based on values in the attribute `timestamp`.
 
-**Name of the season (`season`):** a conclusive name for the selected season. This will be attributed to all locations during that season in the new column 'season'. If you select not to filter the data, locations that are not in the selected season obtain the column entry `none`. If left empty this defaults to the specified time interval, e.g. `11-24 12:00:00 to 1-31 20:00:00`.
+**Name of the season (`season`):** a conclusive name for the selected season. This will be attributed to all locations during that season in the new column 'season'. Records that are not in the selected season obtain the column entry `none`. If left empty this defaults to the specified time interval, e.g. `11-24 12:00:00 to 1-31 20:00:00`.
 
 **Filter data for the season? (`filter`):** select whether to filter the input data to retain only records with a timestamp falling within the specified seasons and years. If unselected, the input data set will be returned with an extra column 'season' appended. Default TRUE.
 
