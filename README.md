@@ -29,7 +29,7 @@ none
 
 **Years to select seasons from (`years`):** a string of comma-separated calender years. The (empty) default setting leads to the selection of records across all years in the data set. Example: 2013, 2014, 2015. If the specified season crosses December-January, the starting year of the selected season must be included. Records are assessed based on values in the attribute `timestamp`.
 
-**Name of the season (`season`):** a conclusive name for the selected season. This will be attributed to all locations during that season in the new column 'season'. Records that are not in the selected season obtain the column entry `none`. If left empty this defaults to the specified time interval, e.g. `11-24 12:00:00 to 1-31 20:00:00`.
+**Name of the season (`season`):** a conclusive name for the selected season. This will be attributed to all locations during that season in the new column 'season'. If you select not to filter the data, records that are not in the selected season obtain the column entry `none`. If left empty this defaults to the specified time interval, e.g. `11-24 12:00:00 to 1-31 20:00:00`.
 
 **Filter data for the season? (`filter`):** select whether to filter the input data to retain only records with a timestamp falling within the specified seasons and years. If unselected, the input data set will be returned with an extra column 'season' appended. Default TRUE.
 
