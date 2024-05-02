@@ -38,7 +38,7 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
     
     if (is.null(season))
     {
-      logger.info(paste0("You have not provided a name for your season to appear in the annotaiton column. Based on your selected time range we set it to: ",startday," to ",endday,"."))
+      logger.info(paste0("You have not provided a name for your season to appear in the annotation column. Based on your selected time range we set it to: ",startday," to ",endday,"."))
       season <- paste(startday,"to",endday)
     } else logger.info(paste0("You have provided that you season is called: ",season,". This name will appear in the annotation column."))
     
@@ -56,7 +56,7 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
       ends <- c(ends[1] - years(1), ends)
       starts <- c(starts[1] - years(1), starts)
     }
-    
+
     timeitvs <- data.frame("start"=as.POSIXct(starts,tz="UTC"), "end"=as.POSIXct(ends,tz="UTC"))
     timeitvs.list <- split(timeitvs, seq(nrow(timeitvs)))
     
@@ -82,9 +82,10 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
       }
       if (splitt==TRUE)
       {
-        logger.info("Your data will be filtered to the selected season and split to separate tracks per year. This will exclude unrealistic steps.")
+        logger.info("Your data will be filtered to the selected season and split to separate tracks per year (named after the starting year of the selected season). This will exclude unrealistic steps.")
+        yrs <- year(starts)
         filt <-  setNames(lapply(seq_along(filt), function(x) {
-          yrs <- unlist(lapply(filt[[x]], function(y) min(year(mt_time(y)[1]))))
+          #yrs <- unlist(lapply(filt[[x]], function(y) min(year(mt_time(y)[1]))))
           setNames(filt[[x]],yrs)
         }), names(filt))
         
@@ -92,25 +93,15 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
         len_spl <- as.numeric(lapply(filt_spl,function(x) nrow(x)))
         filt_spl_nn <- filt_spl[len_spl>0]
         
-        filtf <- mt_stack(filt_spl_nn,.track_combine="rename") #the names should include the year, but this takes too much time now to figure out. later
-        
-        #update track names to include the year
-        
-        ids <- unique(mt_track_id(filtf))
-        idsx <- ids[which (ids %in% unique(mt_track_id(data)) == FALSE)]
-        trackid_new <- mt_track_id(filtf)
-
-        for (k in seq(along=idsx))
+        # set new trackids in each sub-track
+        newtrackidname <- paste0(mt_track_id_column(filt_spl_nn[[1]]),"_year")
+        for (i in seq(along=filt_spl_nn)) 
         {
-          ixdotE <- max(gregexpr("[.]",idsx[k])[[1]]) # index of last dot
-          ixE <- nchar(idsx[k])
-          yri <- year(mt_time(filtf[mt_track_id(filtf)==idsx[k],]))[1]
-
-          trackid_new[mt_track_id(filtf)==idsx[k]] <- paste0(substring(idsx[k],1,ixdotE),yri)
+          filt_spl_nn[[i]][newtrackidname] <- names(filt_spl_nn)[i]
+          filt_spl_nn[[i]] <- mt_set_track_id(filt_spl_nn[[i]],newtrackidname)
         }
-        newtrackidname <- paste0(mt_track_id_column(filtf),"_year")
-        filtf[newtrackidname] <- trackid_new
-        filtf <- mt_set_track_id(filtf,newtrackidname) #note that the trackid column name has changed accordingly
+        
+        filtf <- mt_stack(filt_spl_nn,.track_combine="rename") #the names should include the year, but this takes too much time now to figure out. later
         
         logger.info(paste0("Your track id column has changed to '",newtrackidname,"' leading to the followng trackIDs: \n",paste(unique(mt_track_id(filtf)),collapse=",\n")))
       }
