@@ -15,11 +15,11 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
 
   if (is.null(years))
   {
-    years.vec <- unique(as.POSIXlt(mt_time(data),tz="UTC")$year+1900)
+    years.vec <- sort(unique(as.POSIXlt(mt_time(data),tz="UTC")$year+1900))
     logger.info(paste0("You have selected all years of the data set: ",paste(years.vec,collapse=", ")))
   } else 
   {
-    years.vec <- as.numeric(strsplit(years,",")[[1]])
+    years.vec <- sort(as.numeric(strsplit(years,",")[[1]]))
     logger.info(paste("You have selected to filter for the following years:",paste(years.vec,collapse=", ")))
   }
   
@@ -52,6 +52,9 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
       #starts <- c(strptime(paste0(years.vec[1],"-",1,"-",1," ",0,":",0,":",0),format=c("%Y-%m-%d %H:%M:%S"),tz="UTC"),starts)
       #ends <- c(ends,strptime(paste0(years.vec[len],"-",12,"-",31," ",23,":",59,":",59),format=c("%Y-%m-%d %H:%M:%S"),tz="UTC"))
       ends <- ends + years(1)
+      # need to add another year to the front, in case there are additional intervals
+      ends <- c(ends[1] - years(1), ends)
+      starts <- c(starts[1] - years(1), starts)
     }
     
     timeitvs <- data.frame("start"=as.POSIXct(starts,tz="UTC"), "end"=as.POSIXct(ends,tz="UTC"))

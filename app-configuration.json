@@ -1,6 +1,6 @@
 {
-    "startTimestamp" : "2000-04-01T12:00:00Z",
-    "endTimestamp" : "2000-07-01T12:00:00Z",
+    "startTimestamp" : "2000-12-06T12:00:00Z",
+    "endTimestamp" : "2000-04-11T12:00:00Z",
     "years" : null,
     "filter" : true,
     "season" : "spring", 
