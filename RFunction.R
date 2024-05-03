@@ -106,6 +106,11 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
           
           filtf <- mt_stack(filt_spl_nn,.track_combine="rename") #the names should include the year, but this takes too much time now to figure out. later
           
+          # check if individual_local_identifier is still in track_data, else pass down
+          if(!any(names(mt_track_data(filtf))=="individual_local_identifier") & any(names(filtf)=="individual_local_identifier"))  filtf <- mt_as_track_attribute(filtf,"individual_local_identifier",.keep=TRUE) 
+          # same for event_data
+          if(!any(names(filtf)=="individual_local_identifier") & any(names(mt_track_data(filtf))=="individual_local_identifier"))  filtf <- mt_as_event_attribute(filtf,"individual_local_identifier",.keep=TRUE)
+          
           logger.info(paste0("Your track id column has changed to '",newtrackidname,"' leading to the followng trackIDs: \n",paste(unique(mt_track_id(filtf)),collapse=",\n")))
         }
       }   
