@@ -91,21 +91,24 @@ rFunction <- function(startTimestamp=NULL, endTimestamp=NULL, years=NULL,filter=
         
         filt_spl <- unlist(filt,recursive=FALSE)
         len_spl <- as.numeric(lapply(filt_spl,function(x) nrow(x)))
-        filt_spl_nn <- filt_spl[len_spl>0]
         
-        # set new trackids in each sub-track
-        newtrackidname <- paste0(mt_track_id_column(filt_spl_nn[[1]]),"_year")
-        for (i in seq(along=filt_spl_nn)) 
+        if (all(len_spl==0)) filtf <- filt_spl[[1]] else # return empty object if no data in the season
         {
-          filt_spl_nn[[i]][newtrackidname] <- names(filt_spl_nn)[i]
-          filt_spl_nn[[i]] <- mt_set_track_id(filt_spl_nn[[i]],newtrackidname)
+          filt_spl_nn <- filt_spl[len_spl>0]
+          
+          # set new trackids in each sub-track
+          newtrackidname <- paste0(mt_track_id_column(filt_spl_nn[[1]]),"_year")
+          for (i in seq(along=filt_spl_nn)) 
+          {
+            filt_spl_nn[[i]][newtrackidname] <- names(filt_spl_nn)[i]
+            filt_spl_nn[[i]] <- mt_set_track_id(filt_spl_nn[[i]],newtrackidname)
+          }
+          
+          filtf <- mt_stack(filt_spl_nn,.track_combine="rename") #the names should include the year, but this takes too much time now to figure out. later
+          
+          logger.info(paste0("Your track id column has changed to '",newtrackidname,"' leading to the followng trackIDs: \n",paste(unique(mt_track_id(filtf)),collapse=",\n")))
         }
-        
-        filtf <- mt_stack(filt_spl_nn,.track_combine="rename") #the names should include the year, but this takes too much time now to figure out. later
-        
-        logger.info(paste0("Your track id column has changed to '",newtrackidname,"' leading to the followng trackIDs: \n",paste(unique(mt_track_id(filtf)),collapse=",\n")))
-      }
-      
+      }   
       if (nrow(filtf)==0) #if there remain no data at all
       {
         logger.info("!None of your data lie in the requested season. Reselect data set or time frame. Return NULL.") #moveStack does not allow empty objects
